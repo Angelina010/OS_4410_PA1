@@ -1,0 +1,24 @@
+import lists
+from lists import subseq
+def PrioQ(n) returns init:
+    # Create n empty lists one for each priority
+    init = [ [] for _ in range(n)]
+
+
+def put(pq, prio, v):
+    atomically:
+        pq[prio] = pq[prio] + [v]
+
+def get(pq) returns r:
+    atomically:
+        empty = True
+        for i in range(len(pq)):
+            if len(pq[i]) >0:
+                value = pq[i][0]
+                pq[i] = subseq(pq[i],1,len(pq[i]))
+                empty = False
+                r = (True, value)
+        if empty == True:
+            r = (False, None)
+
+    
