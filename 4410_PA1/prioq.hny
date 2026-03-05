@@ -11,14 +11,14 @@ def put(pq, prio, v):
 
 def get(pq) returns r:
     atomically:
-        empty = True
+        done = False
         for i in range(len(pq)):
-            if len(pq[i]) >0:
+            if len(pq[i]) > 0 and not done:
                 value = pq[i][0]
                 pq[i] = subseq(pq[i],1,len(pq[i]))
-                empty = False
+                done = True
                 r = (True, value)
-        if empty == True:
+        if done == False:
             r = (False, None)
 
     
