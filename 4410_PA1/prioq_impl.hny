@@ -5,35 +5,37 @@ def PrioQ(n) returns pq:
     pq = malloc({ .tails: [None for _ in {0..n-1}], .lock: Lock() })
 
 def put(pq, prio, v):
-    node = malloc({.value: v, .next:None})
-    acquire(pq->lock)
-    if pq->tails[prio] == None:
+    var node = malloc({.value: v, .next:None})
+    var q = !pq
+    acquire(?q->lock)
+    if q->tails[prio] == None:
         node->next = node
     else:
-        let tail = pq->tails[prio]
-        let head = tail->next:
-            tail->next = node
-            node->next = head
-    pq->tails[prio] = node
-    release(pq->lock)
+        var tail = q->tails[prio]
+        var head = tail->next
+        tail->next = node
+        node->next = head
+    q->tails[prio] = node
+    release(?q->lock)
 
 
 def get(pq) returns r:
-    done = False
+    var done = False
     r = (False, None)
-    acquire(pq->lock)
-    for i in {0..len(pq->tails) - 1}:
-        tail = pq->tails[i]
+    var q = !pq
+    acquire(?q->lock)
+    for i in {0..len(q->tails) - 1}:
+        var tail = q->tails[i]
         if tail != None and not done:
-            head = tail->next
+            var head = tail->next
             r = (True, head->value)
             if head == tail:
-                pq->tails[i] = None
+                q->tails[i] = None
             else:
                 tail->next = head->next
             free(head)
             done = True
 
-    release(pq->lock)
+    release(?q->lock)
 
 
