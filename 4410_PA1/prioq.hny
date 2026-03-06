@@ -2,17 +2,18 @@ import lists
 from lists import subseq
 def PrioQ(n) returns init:
     # Create n empty lists one for each priority
-    init = [ [] for _ in range(n)]
+    init = [ [] for _ in {0..n-1}]
 
 
 def put(pq, prio, v):
     atomically:
         pq[prio] = pq[prio] + [v]
 
+
 def get(pq) returns r:
     atomically:
         done = False
-        for i in range(len(pq)):
+        for i in {0 ..len(pq)-1}:
             if len(pq[i]) > 0 and not done:
                 value = pq[i][0]
                 pq[i] = subseq(pq[i],1,len(pq[i]))

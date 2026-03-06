@@ -1,0 +1,28 @@
+import prioq
+
+const NPRIO = 1
+const NPUT = 1
+const NGET = 1
+
+myq = prioq.PrioQ(NPRIO)
+def put_thread(num):
+    
+    priority = choose({0..NPRIO-1})
+    value = choose({0..10})
+    print("invoke PUT number", num, "priority is ",priority, " value is ",value )
+    put(myq,priority,value)
+    print("complete PUT number", num, "priority is ",priority, " value is ",value )
+
+
+def get_thread(num):
+    print("invoke GET number", num)
+    value = prioq.get(myq)
+    print("complete GET number",num, " value is ",value)
+
+for i in {0..NPUT-1}:
+    spawn put_thread(i)
+
+for i in {0..NGET-1}:
+    spawn get_thread(i)
+  
+

@@ -2,30 +2,30 @@ from synch import Lock, acquire, release
 from alloc import malloc, free
 
 def PrioQ(n) returns pq:
-    pq = malloc { .tails: [None for _ in {0..n-1}], .lock: Lock() }
+    pq = malloc({ .tails: [None for _ in {0..n-1}], .lock: Lock() })
 
 def put(pq, prio, v):
-    let node = malloc({.value: v, .next:None})
+    node = malloc({.value: v, .next:None})
     acquire(pq->lock)
     if pq->tails[prio] == None:
         node->next = node
     else:
         let tail = pq->tails[prio]
-        let head = tail->next
-        tail->next = node
-        node->next = head
+        let head = tail->next:
+            tail->next = node
+            node->next = head
     pq->tails[prio] = node
     release(pq->lock)
 
 
 def get(pq) returns r:
-    let done = False
+    done = False
     r = (False, None)
     acquire(pq->lock)
     for i in {0..len(pq->tails) - 1}:
-        let tail = pq->tails[i]
+        tail = pq->tails[i]
         if tail != None and not done:
-            let head = tail->next
+            head = tail->next
             r = (True, head->value)
             if head == tail:
                 pq->tails[i] = None
